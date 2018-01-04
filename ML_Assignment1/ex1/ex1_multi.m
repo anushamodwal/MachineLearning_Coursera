@@ -57,33 +57,12 @@ X = [ones(m, 1) X];
 
 %% ================ Part 2: Gradient Descent ================
 
-% ====================== YOUR CODE HERE ======================
-% Instructions: We have provided you with the following starter
-%               code that runs gradient descent with a particular
-%               learning rate (alpha). 
-%
-%               Your task is to first make sure that your functions - 
-%               computeCost and gradientDescent already work with 
-%               this starter code and support multiple variables.
-%
-%               After that, try running gradient descent with 
-%               different values of alpha and see which one gives
-%               you the best result.
-%
-%               Finally, you should complete the code at the end
-%               to predict the price of a 1650 sq-ft, 3 br house.
-%
-% Hint: By using the 'hold on' command, you can plot multiple
-%       graphs on the same figure.
-%
-% Hint: At prediction, make sure you do the same feature normalization.
-%
 
 fprintf('Running gradient descent ...\n');
 
 % Choose some alpha value
 alpha = 0.01;
-num_iters = 400;
+num_iters = 50;
 
 % Init Theta and Run Gradient Descent 
 theta = zeros(3, 1);
@@ -92,8 +71,16 @@ theta = zeros(3, 1);
 % Plot the convergence graph
 figure;
 plot(1:numel(J_history), J_history, '-b', 'LineWidth', 2);
+hold on;
 xlabel('Number of iterations');
 ylabel('Cost J');
+
+[theta1, J1] = gradientDescentMulti(X, y, zeros(3, 1), 0.3, num_iters);
+[theta2, J2] = gradientDescentMulti(X, y, zeros(3, 1), 0.1, num_iters);
+[theta3, J3] = gradientDescentMulti(X, y, zeros(3, 1), 0.03, num_iters);
+plot(1:50, J1(1:50), 'b', 'LineWidth', 5);
+plot(1:50, J2(1:50), 'r', 'LineWidth', 5);  % best learning rate
+plot(1:50, J3(1:50), 'k', 'LineWidth', 5);
 
 % Display gradient descent's result
 fprintf('Theta computed from gradient descent: \n');
@@ -101,14 +88,12 @@ fprintf(' %f \n', theta);
 fprintf('\n');
 
 % Estimate the price of a 1650 sq-ft, 3 br house
-% ====================== YOUR CODE HERE ======================
-% Recall that the first column of X is all-ones. Thus, it does
-% not need to be normalized.
-price = 0; % You should change this
+testExample = [1650 3];
+% Feature Normatlization
+testExample = (testExample - mu) ./ sigma;
+testExample = [ones(1,1), testExample];
 
-
-% ============================================================
-
+price = testExample * theta;
 fprintf(['Predicted price of a 1650 sq-ft, 3 br house ' ...
          '(using gradient descent):\n $%f\n'], price);
 
@@ -118,16 +103,6 @@ pause;
 %% ================ Part 3: Normal Equations ================
 
 fprintf('Solving with normal equations...\n');
-
-% ====================== YOUR CODE HERE ======================
-% Instructions: The following code computes the closed form 
-%               solution for linear regression using the normal
-%               equations. You should complete the code in 
-%               normalEqn.m
-%
-%               After doing so, you should complete this code 
-%               to predict the price of a 1650 sq-ft, 3 br house.
-%
 
 %% Load Data
 data = csvread('ex1data2.txt');
@@ -148,11 +123,9 @@ fprintf('\n');
 
 
 % Estimate the price of a 1650 sq-ft, 3 br house
-% ====================== YOUR CODE HERE ======================
-price = 0; % You should change this
 
-
-% ============================================================
+testEx = [1 1650 3];
+price = testEx * theta;
 
 fprintf(['Predicted price of a 1650 sq-ft, 3 br house ' ...
          '(using normal equations):\n $%f\n'], price);
