@@ -6,23 +6,18 @@ function plotData(X, y)
 % Create New Figure
 figure; hold on;
 
-% ====================== YOUR CODE HERE ======================
-% Instructions: Plot the positive and negative examples on a
-%               2D plot, using the option 'k+' for the positive
-%               examples and 'ko' for the negative examples.
-%
+%Given Solution
+%pos = find(y==1);
+%neg = find(y==0);
 
-
-
-
-
-
-
-
-
-% =========================================================================
-
-
+%Alternate my intutive solution
+for i = 1:size(y,1)
+	if(y(i) == 1)
+		plot(X(i,1), X(i,2), 'k+', 'LineWidth', 2, 'MarkerSize', 7);
+	else
+		plot(X(i,1), X(i,2), 'ko', 'MarkerFaceColor', 'y', 'MarkerSize', 7);
+	endif
+end
 
 hold off;
 
