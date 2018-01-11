@@ -97,17 +97,17 @@ pause;
 %  In this part, you will get to try different values of lambda and
 %  see how regularization affects the decision coundart
 %
-%  Try the following values of lambda (0, 1, 10, 100).
-%
-%  How does the decision boundary change when you vary lambda? How does
-%  the training set accuracy vary?
+%  Trying the following values of lambda (0, 1, 10, 100).
 %
 
 % Initialize fitting parameters
 initial_theta = zeros(size(X, 2), 1);
 
-% Set regularization parameter lambda to 1 (you should vary this)
+% Set regularization parameter lambda to 1
+%lambda0 = 0;
 lambda = 1;
+%lambda2 = 10;
+%lambda3 = 100;
 
 % Set Options
 options = optimset('GradObj', 'on', 'MaxIter', 400);
@@ -115,7 +115,6 @@ options = optimset('GradObj', 'on', 'MaxIter', 400);
 % Optimize
 [theta, J, exit_flag] = ...
 	fminunc(@(t)(costFunctionReg(t, X, y, lambda)), initial_theta, options);
-
 % Plot Boundary
 plotDecisionBoundary(theta, X, y);
 hold on;
@@ -127,6 +126,10 @@ ylabel('Microchip Test 2')
 
 legend('y = 1', 'y = 0', 'Decision boundary')
 hold off;
+
+plotDecisionBoundary(theta, X, y);
+hold on;
+title(sprintf('lambda = %g', lambda))
 
 % Compute accuracy on our training set
 p = predict(theta, X);
