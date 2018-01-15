@@ -35,7 +35,8 @@ a2 = sigmoid(z2);
 
 a2 = [ones(size(a2, 1), 1) a2];
 z3 = a2 * Theta2';
-h = sigmoid(z3);
+a3 = sigmoid(z3);
+h = a3;
 
 y_classes = zeros(m, num_labels);
 for k=1:m
@@ -52,8 +53,31 @@ regularization = (lambda / (2 * m)) * (sum(sum(Theta1(:,2:end) .^ 2)) + sum(sum(
 
 J = J + regularization;
 
+% BackPropagation
+for t=1:m
+    a_1 = [1; X(t,:)'];
+    z_2 = Theta1 * a_1;
+    a_2 = sigmoid(z_2);
+
+    a_2 = [1; a_2];
+    z_3 = Theta2 * a_2;
+    a_3 = sigmoid(z_3);
+    
+    delta_3 = a_3 - ([1:num_labels] == y(t))';
+    delta_2 = ((Theta2)' * delta_3) .* ([1; sigmoidGradient(z_2)]);
+   
+    % Accumulating errors
+    delta_2 = delta_2(2:end);
+    
+    Theta1_grad = Theta1_grad + delta_2 * a_1';
+    Theta2_grad = Theta2_grad + delta_3 * a_2';
+    
+end
+  
+Theta1_grad = (1 / m) * Theta1_grad + (lambda / m) * [zeros(size(Theta1, 1), 1) Theta1(:, 2:end)];
+Theta2_grad = (1 / m) * Theta2_grad + (lambda / m) * [zeros(size(Theta2, 1), 1) Theta2(:, 2:end)];
+
 % Unroll gradients
 grad = [Theta1_grad(:) ; Theta2_grad(:)];
-
-
+    
 end
